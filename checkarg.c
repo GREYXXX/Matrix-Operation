@@ -1,33 +1,13 @@
+
 #include "variables.h"
 
 int main(int argc, char *argv[])
 {
    	int c;		//Stores a value from getopt_long which determines whether success or failure
-
+	char command[3];//Stores the calculation to be executed for the matrix
 	char *seg1 = malloc(sizeof(char)*4); //Stores file name
 	char *seg2 = malloc(sizeof(char)*4); //Stores another file name(if needed)
 
-	argv += 2;	
-	printf("%s\n", argv[0]);
-	argc -= 2;
-	c = getopt(argc, argv, "f:t:l");
-	printf("%i\n",c);
-	/*if(c == -1){
-		printf("Program failed\n");
-		exit(EXIT_FAILURE);
-	}*/
-	switch(c) {
-		case 'f':
-			printf("File input\n");
-			break;
-		case 't':
-			printf("Threads\n");
-			break;
-		case 'l':
-			printf("Log\n");
-			break;
-	}
-    
   	while (1) {	//Looks at arguments
 		int this_option_optind = optind ? optind : 1;
         	int option_index = 0;
@@ -39,46 +19,56 @@ int main(int argc, char *argv[])
 			{"mm",  no_argument,       0,  'e' },
 			{0,         0,             0,   0  }
 		};
-
-		c = getopt_long(argc, argv, "a:bcdef:",
+		c = getopt_long(argc, argv, "a:bcdelf:t:",
 			long_options, &option_index);
+
 		if (c == -1)	//Argument fail
 		    break;
 
 		switch (c) {
 		case 0:	//Default case
 			break;
-	       	case 'a':
+		case 'a':
 		    	printf("scalar multiplication %s\n", optarg);
-			printf("Option index is: %i\n", option_index);
+			strcpy(command, "sm");	
 		    	break;
 
 	       	case 'b':
 		    	printf("trace\n");
-			printf("Option index is: %i\n", option_index);
+			strcpy(command, "tr");		
 		    	break;
 
 	       	case 'c':
 		    	printf("addition\n");
-			printf("Option index is: %i\n", option_index);
-
+			strcpy(command, "ad");
 		    	break;
 
 	       	case 'd':
 		    	printf("transpose\n");
+			strcpy(command, "ts");
 		    	break;
 		case 'e':
 			printf("Matrix multiplication\n");
+			strcpy(command, "mm");
 			break;
 	       	case 'f':
-		    	//seg1 = optarg;
 			strcpy(seg1, optarg);
-		    	//seg2 = argv[optind];
-			strcpy(seg2, argv[optind]);
-		    	printf("File is %s and %s\n", seg1, seg2);
+			if(argv[optind]) {
+				strcpy(seg2, argv[optind]);
+				printf("File is %s and %s\n", seg1, seg2);
+			}
+			else {
+				printf("File is %s\n", seg1);
+			}
 		    	break;
+		case 't':
+			printf("Threads\n");
+			break;
+		case 'l':
+			printf("Log\n");
+			break;
 
-	       	case '?':
+	       	case '?':	//If the flag is not found, goes here
 		    	break;
 
 	       	default:
