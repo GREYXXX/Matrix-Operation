@@ -1,12 +1,12 @@
 #include <stdio.h>     /* for printf */
 #include <stdlib.h>    /* for exit */
 #include <getopt.h>
-#define N 255
+#define N 255	
 
 Matrix readfile(char *optarg) {
 	Matrix a;
-        char *chr[N];
-        for(int k = 0; k < N;k++)
+        char *chr[N]; //The buffer to store each line of the input file
+        for(int k = 0; k < N;k++)	//Allocating memory for each pointer in pointer array(chr)
 {       
         chr[k]=(char*)malloc(sizeof(char)*4);
 }
@@ -16,17 +16,18 @@ Matrix readfile(char *optarg) {
                 exit(1);
      }
         int i=0;
-        char chunk[128];
+        char chunk[128];	//Chunk represents a line in the input file
         while(fgets(chunk, sizeof(chunk), fp) != NULL){
-                strcpy(chr[i],chunk);
+                strcpy(chr[i],chunk);	//Copies each line onto the buffer
                 i++;
  }
+	//p and q are used to compare the elements in the array and determine whether they are integers or floats
 	char *q = (char*)malloc(sizeof(char)*4);
 	char *p = (char*)malloc(sizeof(char)*4);
 	p = “int";
 	q = "float";
-	int row = atoi(chr[1]);
-	int col = atoi(chr[2]);
+	int row = atoi(chr[1]); //Max number of rows
+	int col = atoi(chr[2]); //Max number of columns
 	int k = 0;//counting the number of non-zero value
 	//int t = 0; 
 	for(int i = 0;i < row;i++)
@@ -46,9 +47,9 @@ Matrix readfile(char *optarg) {
 				else	{countine;}
 	}
 }
-	a.mu = row;
-	a.nu = col;
-	a.tu = k;
+	a.mu = row; //Max number of rows
+	a.nu = col; //Max number of columns
+	a.tu = k; //Number of non-zero values
         //fputs(chr,stdout);
         fclose(fp);
 	return a;
