@@ -1,3 +1,4 @@
+
 #include "variables.h"
 
 int main(int argc, char *argv[])
@@ -7,15 +8,17 @@ int main(int argc, char *argv[])
 	char *seg1 = malloc(sizeof(char)*4); //Stores file name
 	char *seg2 = malloc(sizeof(char)*4); //Stores another file name(if needed)
 
-	argv += 2;	
-	printf("%s\n", argv[0]);
-	argc -= 2;
-	c = getopt(argc, argv, "f:t:l");
-	printf("%i\n",c);
+    char **g = argv;
+	g += 1;	
+	printf("First argument is now: %s\n", g[0]);
+	argc -= 1;
+	c = getopt(argc, g, "f:t:l");
+	printf("The case for 2nd argument: %i\n",c);
 	/*if(c == -1){
 		printf("Program failed\n");
 		exit(EXIT_FAILURE);
 	}*/
+	
 	switch(c) {
 		case 'f':
 			printf("File input\n");
@@ -27,7 +30,11 @@ int main(int argc, char *argv[])
 			printf("Log\n");
 			break;
 	}
-    
+	//argv -= 1;
+	//argc += 1;
+	
+	printf("Original first argument is: %s\n", argv[0]);
+	
   	while (1) {	//Looks at arguments
 		int this_option_optind = optind ? optind : 1;
         	int option_index = 0;
@@ -42,13 +49,14 @@ int main(int argc, char *argv[])
 
 		c = getopt_long(argc, argv, "a:bcdef:",
 			long_options, &option_index);
+		printf("Case for 2nd argument is now: %i\n", c);
 		if (c == -1)	//Argument fail
 		    break;
 
 		switch (c) {
 		case 0:	//Default case
 			break;
-	       	case 'a':
+	    case 'a':
 		    	printf("scalar multiplication %s\n", optarg);
 			printf("Option index is: %i\n", option_index);
 		    	break;
