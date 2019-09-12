@@ -4,8 +4,8 @@ int main(int argc, char *argv[])
 {
    	int c;		//Stores a value from getopt_long which determines whether success or failure
 	char *command = malloc(sizeof(char));//Stores the calculation to be executed for the matrix
-	char *seg1 = malloc(sizeof(char)*4); //Stores file name
-	char *seg2 = malloc(sizeof(char)*4); //Stores another file name(if needed)
+	char *seg1 = malloc(sizeof(char)); //Stores file name
+	char *seg2 = malloc(sizeof(char)); //Stores another file name(if needed)
 	char *op = malloc(sizeof(char));
 	char *sm = "sm";
         char *tr = "tr";
