@@ -1,6 +1,8 @@
 #include "variables.h"
 
-Matrix transposeMatrix(Matrix M,Matrix T){
+Matrix transposeMatrix(Matrix M){
+	Matrix T;
+	
 	T.col_num=M.row_num;
 	T.row_num=M.col_num;
 	T.value_num=M.value_num;
