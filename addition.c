@@ -64,20 +64,20 @@ Matrix addition(Matrix A,Matrix B)
         }
     }
  
-    while(ak <= A.value_num){
-        C.data[ck].row = A.data[ak].row;
-        C.data[ck].col = A.data[ak].col;
-        C.data[ck].value = A.data[ak].value;
-        ++ck;
-        ++ak;
-    }
-    while(bk <= B.value_num){
-        C.data[ck].row = B.data[bk].row;
-        C.data[ck].row = B.data[bk].row;
-        C.data[ck].value = B.data[bk].value;
-        ++ck;
-        ++bk;
-    }
-    C.value_num = ck + 1;
-    return C;
+	while(ak <= A.value_num){
+        	C.data[ck].row = A.data[ak].row;
+        	C.data[ck].col = A.data[ak].col;
+        	C.data[ck].value = A.data[ak].value;
+        	++ck;
+        	++ak;
+    	}
+	while(bk <= B.value_num){
+        	C.data[ck].row = B.data[bk].row;
+        	C.data[ck].row = B.data[bk].row;
+        	C.data[ck].value = B.data[bk].value;
+        	++ck;
+        	++bk;
+    	}
+	C.value_num = ck + 1;
+	return C;
 }
