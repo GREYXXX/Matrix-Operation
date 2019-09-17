@@ -1,5 +1,6 @@
 #include "variables.h"
 
+
 Matrix transposeMatrix(Matrix M){
 	Matrix T;
 	

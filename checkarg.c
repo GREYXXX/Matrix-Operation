@@ -4,7 +4,8 @@ int main(int argc, char *argv[])
 {
    	int c;		//Stores a value from getopt_long which determines whether success or failure
 	char *command = malloc(sizeof(char));//Stores the calculation to be executed for the matrix
-	char *seg1 = malloc(sizeof(char)); //Stores file name
+	//char *seg1 = malloc(sizeof(char)); //Stores file name
+	char seg1[N];
 	char *seg2 = malloc(sizeof(char)); //Stores another file name(if needed)
 	char *op = malloc(sizeof(char));
 	char *sm = "sm";
@@ -32,7 +33,7 @@ int main(int argc, char *argv[])
 
 		switch (c) {
 		case 0:	//Default case
-			:break;
+			break;
 		case 'a':
 		    	printf("scalar multiplication %s\n", optarg);
 			strcpy(command, "sm");
@@ -80,28 +81,33 @@ int main(int argc, char *argv[])
 	       	default:
 		printf("?? getopt returned character code 0%o ??\n", c);
 		}
-		Matrix m = readfile(seg1);
-		if(seg2){
-				Matrix n = readfile(seg2);
-		}
+	}
+	Matrix m = readfile(seg1);
+	if(argv[optind]){
+		Matrix n = readfile(seg2);
+	}
 		 
-		if(strcmp(command,sm)==0){
-			scalar(m,op);
+	if(strcmp(command,sm)==0){
+		scalar_mul(op,m);
 	}
-		else if(strcmp(command,tr)==0){
-			trace(m);
+	else if(strcmp(command,tr)==0){
+		trace(m);
 	}
-		else if(strcmp(command,ts)==0){
-			transpose(m);
+	else if(strcmp(command,ts)==0){
+		//transposeMatrix(m);
 	}
-		else if(strcmp(command,ad)==0){
-			addition();
+	else if(strcmp(command,ad)==0){
+		printf("Feature not available yet\n");
+		//addition();
 	}
-		else if(strcmp(command,mm)==0{
-			multiply();
-	}			
+	else if(strcmp(command,mm)==0){
+		printf("Feature not available yet\n");
+		//multiply();
+	}
+			
+		
 	free(op);		
-	free(seg1);
+	//free(seg1);
 	free(seg2);
 
 	exit(EXIT_SUCCESS);
