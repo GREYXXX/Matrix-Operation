@@ -30,7 +30,7 @@ Matrix readfile(char *optarg) {
 	//int t = 0; 
 	
 	for(int i = 0;i < row;i++) {
-		for(int j=0;i < col; i++) {
+		for(int j=0;j < col; j++) {
 				a.data[k].row = i;
 				a.data[k].col = j;
 				if(chr[3][k]!='0'){
@@ -42,7 +42,7 @@ Matrix readfile(char *optarg) {
 	}
 	a.row_num = row; //Max number of rows
 	a.col_num = col; //Max number of columns
-	a.value_num = k; //Number of non-zero values
+	a.value_num = k + 1; //Number of non-zero values
         //fputs(chr,stdout);
         fclose(fp);
 	return a;

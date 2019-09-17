@@ -1,8 +1,19 @@
 #include "variables.h"
 
 
+Matrix printAddition(Matrix C)
+{
+	printf("Number of non-zero elements: %i\n", C.value_num);
+	for(int i = 0; i < C.value_num; i++) {
+		printf("%i ", C.data[i].value);
+	}
+	printf("\n");
+}
+
 Matrix addition(Matrix A,Matrix B)
 {
+	printf("Number of non-zero elements in first matrix %i\n", A.value_num);
+	printf("Number of non-zero elements in second matrix %i\n", B.value_num);
 	Matrix C;
 	int ai,bi,ci;
 	int aj,bj,cj;
@@ -79,5 +90,14 @@ Matrix addition(Matrix A,Matrix B)
         	++bk;
     	}
 	C.value_num = ck + 1;
+
+	printAddition(C);
 	return C;
 }
+
+
+
+
+
+
+

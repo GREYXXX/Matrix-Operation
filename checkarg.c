@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 			}
 		    	break;
 		case 't':
-			printf("Threads\n");
+			printf("Number of Threads requested: %s\n",optarg);
 			break;
 		case 'l':
 			printf("Log\n");
@@ -83,8 +83,9 @@ int main(int argc, char *argv[])
 		}
 	}
 	Matrix m = readfile(seg1);
+	Matrix n;
 	if(argv[optind]){
-		Matrix n = readfile(seg2);
+		n = readfile(seg2);
 	}
 		 
 	if(strcmp(command,sm)==0){
@@ -97,8 +98,8 @@ int main(int argc, char *argv[])
 		//transposeMatrix(m);
 	}
 	else if(strcmp(command,ad)==0){
-		printf("Feature not available yet\n");
-		//addition();
+		printf("Addition\n");
+		addition(m, n);
 	}
 	else if(strcmp(command,mm)==0){
 		printf("Feature not available yet\n");

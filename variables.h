@@ -22,4 +22,5 @@ typedef struct{
 extern Matrix readfile(char *);
 extern Matrix scalar_mul(char *, Matrix);
 extern int trace(Matrix);
-//extern Matrix transposeMatrix(Matrix, Matrix);
+extern Matrix addition(Matrix, Matrix);
+extern Matrix transposeMatrix(Matrix);
