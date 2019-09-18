@@ -20,10 +20,6 @@ Matrix readfile(char *optarg) {
  	}
 
 	//p and q are used to compare the elements in the array and determine whether they are integers or floats
-	char *q = (char*)malloc(sizeof(char)*4);
-	char *p = (char*)malloc(sizeof(char)*4);
-	p = "int";
-	q = "float";
 	int row = atoi(chr[1]); //Max number of rows
 	int col = atoi(chr[2]); //Max number of columns
 	int k = 0;//counting the number of non-zero value
@@ -49,8 +45,5 @@ Matrix readfile(char *optarg) {
         for(int a = 0; a <10;a++) {
         free(chr[a]);
 	}
-
-	free(p);
-	free(q);
 }
 
