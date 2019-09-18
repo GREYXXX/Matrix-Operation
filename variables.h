@@ -10,7 +10,7 @@
 typedef struct{
 	int row;
 	int col;
-	int value;
+	float value;
 }Triple;
 
 typedef struct{
