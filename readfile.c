@@ -58,8 +58,8 @@ Matrix readfile(char *optarg) {
 	for( int i = 1; i <= col; i++) {
 		for(int j = 1; j <= row; j++) {
 			if(matrixLine[iteration] != '0') {
-				a.data[count].row = j;
-				a.data[count].col = i; 	
+				a.data[count].row = i;
+				a.data[count].col = j; 	
 				a.data[count].value = matrixLine[iteration] - '0';
 				count += 1;
 			} 
