@@ -35,27 +35,27 @@ int main(int argc, char *argv[])
 		case 0:	//Default case
 			break;
 		case 'a':
-		    	printf("scalar multiplication %s\n", optarg);
+		    	printf("Scalar Multiplication %s\n", optarg);
 			strcpy(command, "sm");
 			strcpy(op,optarg);	
 		    	break;
 
 	       	case 'b':
-		    	printf("trace\n");
+		    	printf("Trace\n");
 			strcpy(command, "tr");		
 		    	break;
 
 	       	case 'c':
-		    	printf("addition\n");
+		    	printf("Addition\n");
 			strcpy(command, "ad");
 		    	break;
 
 	       	case 'd':
-		    	printf("transpose\n");
+		    	printf("Transpose\n");
 			strcpy(command, "ts");
 		    	break;
 		case 'e':
-			printf("Matrix multiplication\n");
+			printf("Matrix Multiplication\n");
 			strcpy(command, "mm");
 			break;
 	       	case 'f':
@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
 		//transposeMatrix(m);
 	}
 	else if(strcmp(command,ad)==0){
-		printf("Addition\n");
+		//printf("Addition\n");
 		addition(m, n);
 	}
 	else if(strcmp(command,mm)==0){

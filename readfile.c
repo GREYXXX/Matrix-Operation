@@ -34,27 +34,57 @@ Matrix readfile(char *optarg) {
 	int row = atoi(chr[1]); //Max number of rows
 	int col = atoi(chr[2]); //Max number of columns
 	int k = 0;//counting the number of non-zero value
-	//int t = 0; 
-/*	
-	for(int i = 0;i < row;i++) {
-		for(int j=0;j < col; j++) {
-				printf("Current iteration: %c\n", chr[3][k]);
-				a.data[k].row = i;
-				a.data[k].col = j;
-				if(chr[3][k]!='0'){
-					a.data[k].value = atof(&chr[3][k]);
-					k++;
+
+	char *matrixLine = chr[3];
+	//matrixLine = removeSpaces(matrixLine);
+
+	int numlen = 0; //Keeps track of length of number
+	int count = 0; //Keeps track of number of non-zero values 
+	bool numflag = false; //Checks whether there is a number detected
+
+	//Current row and column count
+	int rowCount = 1;
+	int colCount = 1;
+	char storeNum[5];	
+
+	for(int i = 0; i < strlen(matrixLine) + 1; i++) {
+		if(colCount > col) { 
+			colCount = 1;
+			rowCount++;
+		}
+		else if(matrixLine[i] == '0') {
+			colCount++;	
+			if(colCount > col) {
+				colCount = 1;
+				rowCount++;
 			}
-				else	{continue;}
+		}
+		else if(matrixLine[i] == ' ' || matrixLine[i] == '\0') {
+			if(numflag == true) {
+				storeNum[numlen] = '\0';
+				a.data[count].row = rowCount;
+				a.data[count].col = colCount;
+				a.data[count].value = atof(storeNum);
+				//printf("ROW: %d COL: %d VALUE: %f\n", a.data[count].row, a.data[count].col, a.data[count].value);
+				numflag = false;
+				numlen = 0;
+				count++;
+				colCount++;
+			}	
+			else {
+				continue;
+			}
+		}
+		else {
+			numflag = true;
+			storeNum[numlen] = matrixLine[i];
+			numlen++; 	
 		}
 	}
-*/
-	char *matrixLine = chr[3];
-	matrixLine = removeSpaces(matrixLine);
 
-	int count = 0;
-	//printf("%s\n", matrixLine);
-	int iteration = 0;
+	//printf("ROW: %d COL: %d VALUE: %f\n", a.data[1].row, a.data[1].col, a.data[1].value);
+
+/*
 	for( int i = 1; i <= col; i++) {
 		for(int j = 1; j <= row; j++) {
 			if(matrixLine[iteration] != '0') {
@@ -66,19 +96,18 @@ Matrix readfile(char *optarg) {
 			iteration += 1;
 		}
 	}
-	a.value_num = count;
-	a.row_num = row;
-	a.col_num = col;
-
-		
-	for( int i = 0; i < a.value_num; i++) {
-		printf("Value is: %d\n", a.data[i].value);
-	}	
-		
-
+*/
+	a.value_num = count; //Number of non-zero values
 	a.row_num = row; //Max number of rows
 	a.col_num = col; //Max number of columns
-	a.value_num = count; //Number of non-zero values
+
+/* For Debugging purposes		
+	for( int i = 0; i < a.value_num; i++) {
+		printf("Value is: %f\n", a.data[i].value);
+	}	
+	printf("Number of non-zero values: %i\n", a.value_num);
+*/		
+
         //fputs(chr,stdout);
         fclose(fp);
 	return a;

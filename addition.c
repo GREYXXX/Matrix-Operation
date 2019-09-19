@@ -3,17 +3,31 @@
 
 Matrix printAddition(Matrix C)
 {
-	printf("Number of non-zero elements: %i\n", C.value_num);
-	for(int i = 0; i < C.value_num; i++) {
-		printf("%i ", C.data[i].value);
+	int count = 0;
+	int rowCount = 1;
+	int colCount = 1;
+
+	for(int i = 0; i < (C.row_num * C.col_num); i++) {
+		if(colCount > C.col_num) {
+			colCount = 1;
+			rowCount++;
+		}
+		if(C.data[count].row == rowCount && C.data[count].col == colCount) {
+			printf("%f ", C.data[count].value);
+			count++;
+		}
+		else {
+			printf("0 ");
+		}
+		colCount++;
 	}
 	printf("\n");
+	//printf("ROW %d and COL %d\n", C.data[1].row, C.data[1].col);
+
 }
 
 Matrix addition(Matrix A,Matrix B)
 {
-	printf("Number of non-zero elements in first matrix %i\n", A.value_num);
-	printf("Number of non-zero elements in second matrix %i\n", B.value_num);
 	Matrix C;
 	int ai,bi,ci;
 	int aj,bj,cj;
@@ -89,7 +103,7 @@ Matrix addition(Matrix A,Matrix B)
         	++ck;
         	++bk;
     	}
-	C.value_num = ck + 1;
+	C.value_num = ck;
 
 	printAddition(C);
 	return C;
