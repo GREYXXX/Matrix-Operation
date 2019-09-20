@@ -1,5 +1,30 @@
 #include "variables.h"
 
+Matrix printMatrix(Matrix C)
+{
+	int count = 0;
+	int rowCount = 1;
+	int colCount = 1;
+
+	for(int i = 0; i < (C.row_num * C.col_num); i++) {
+		if(colCount > C.col_num) {
+			colCount = 1;
+			rowCount++;
+		}
+		if(C.data[count].row == rowCount && C.data[count].col == colCount) {
+			printf("%f ", C.data[count].value);
+			count++;
+		}
+		else {
+			printf("0 ");
+		}
+		colCount++;
+	}
+	printf("\n");
+	//printf("ROW %d and COL %d\n", C.data[1].row, C.data[1].col);
+
+}
+
 int main(int argc, char *argv[])
 {
    	int c;		//Stores a value from getopt_long which determines whether success or failure
@@ -89,17 +114,20 @@ int main(int argc, char *argv[])
 	}
 		 
 	if(strcmp(command,sm)==0){
-		scalar_mul(op,m);
+		m = scalar_mul(op,m);
+		printMatrix(m);
 	}
 	else if(strcmp(command,tr)==0){
 		trace(m);
 	}
 	else if(strcmp(command,ts)==0){
-		//transposeMatrix(m);
+		m = transposeMatrix(m);
+		printMatrix(m);
 	}
 	else if(strcmp(command,ad)==0){
 		//printf("Addition\n");
-		addition(m, n);
+		m = addition(m, n);
+		printMatrix(m);
 	}
 	else if(strcmp(command,mm)==0){
 		printf("Feature not available yet\n");

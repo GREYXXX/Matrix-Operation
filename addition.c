@@ -1,31 +1,5 @@
 #include "variables.h"
 
-
-Matrix printAddition(Matrix C)
-{
-	int count = 0;
-	int rowCount = 1;
-	int colCount = 1;
-
-	for(int i = 0; i < (C.row_num * C.col_num); i++) {
-		if(colCount > C.col_num) {
-			colCount = 1;
-			rowCount++;
-		}
-		if(C.data[count].row == rowCount && C.data[count].col == colCount) {
-			printf("%f ", C.data[count].value);
-			count++;
-		}
-		else {
-			printf("0 ");
-		}
-		colCount++;
-	}
-	printf("\n");
-	//printf("ROW %d and COL %d\n", C.data[1].row, C.data[1].col);
-
-}
-
 Matrix addition(Matrix A,Matrix B)
 {
 	Matrix C;
@@ -105,7 +79,6 @@ Matrix addition(Matrix A,Matrix B)
     	}
 	C.value_num = ck;
 
-	printAddition(C);
 	return C;
 }
 

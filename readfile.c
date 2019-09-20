@@ -14,22 +14,39 @@ char *removeSpaces(char *str)
 //This file reads the input and produces an internal representation for the matrix
 Matrix readfile(char *optarg) {
 	Matrix a;
-        char *chr[N]; //The buffer to store each line of the input file
-        for(int k = 0; k < N;k++) {	//Allocating memory for each pointer in pointer array(chr)
-        	chr[k]=(char*)malloc(sizeof(char)*4);
-	}
+	//a.data = (Triple*)malloc(sizeof(Triple));
+
+        char *chr[4]; //The buffer to store each line of the input file
+
         FILE *fp = fopen(optarg, "r");
         if(fp == NULL) {
                 perror("Unable to open file!");
                 exit(1);
      	}
-        int i=0;
-        char chunk[128];	//Chunk represents a line in the input file
+        int g=0;
+        char chunk[16384];	//Chunk represents a line in the input file
+	
+	while(fgets(chunk,sizeof(chunk), fp) != NULL) {
+		chr[g] = strdup(chunk);
+		g++;
+	}
+/*
+	int c;
         while(fgets(chunk, sizeof(chunk), fp) != NULL){
-                strcpy(chr[i],chunk);	//Copies each line onto the buffer
-                i++;
+		if(g == 3) {
+			printf("This is last line: %d\n", g+1);
+			while((c = fgetc(fp)) != EOF) {
+				printf("%c\n", c);
+			}
+			break;
+		}
+		//printf("%s\n Length is %ld", chunk, strlen(chunk));
+                strcpy(chr[g],chunk);	//Copies each line onto the buffer
+		printf("This is line: %d\n Words are: %s", g+1, chr[g]);
+                g++;
  	}
-
+	exit(EXIT_FAILURE);
+*/
 	//p and q are used to compare the elements in the array and determine whether they are integers or floats
 	int row = atoi(chr[1]); //Max number of rows
 	int col = atoi(chr[2]); //Max number of columns
@@ -48,11 +65,14 @@ Matrix readfile(char *optarg) {
 	char storeNum[5];	
 
 	for(int i = 0; i < strlen(matrixLine) + 1; i++) {
+		//printf("%s\n", matrixLine);
+		//printf("%ld\n", strlen(matrixLine));
+		//exit(EXIT_FAILURE);
 		if(colCount > col) { 
 			colCount = 1;
 			rowCount++;
 		}
-		else if(matrixLine[i] == '0') {
+		if(matrixLine[i] == '0' && numflag == false) {
 			colCount++;	
 			if(colCount > col) {
 				colCount = 1;
@@ -69,6 +89,8 @@ Matrix readfile(char *optarg) {
 				numflag = false;
 				numlen = 0;
 				count++;
+				//a.data = realloc(a.data, sizeof(Triple) * (count+1));
+				//printf("Memory allocated: %ld and value is: %f\n", sizeof(Triple) * (count+1), a.data[count-1].value);
 				colCount++;
 			}	
 			else {
@@ -99,8 +121,8 @@ Matrix readfile(char *optarg) {
         //fputs(chr,stdout);
         fclose(fp);
 	return a;
-        for(int a = 0; a <10;a++) {
-        free(chr[a]);
+        for(int i = 0; i <4;i++) {
+        free(chr[i]);
 	}
 }
 

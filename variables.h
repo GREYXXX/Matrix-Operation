@@ -15,6 +15,7 @@ typedef struct{
 }Triple;
 
 typedef struct{
+	//Triple *data;
 	Triple data[N];
 	int row_num, col_num, value_num;
 }Matrix;

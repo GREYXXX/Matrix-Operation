@@ -1,6 +1,5 @@
 #include "variables.h"
 
-
 Matrix transposeMatrix(Matrix M){
 	Matrix T;
 	
@@ -9,7 +8,7 @@ Matrix transposeMatrix(Matrix M){
 	T.value_num=M.value_num;
 
 	int k = 0; 
-	for(int i = 0; i < M.col_num; i++){
+	for(int i = 1; i <= M.col_num; i++){
 		for(int j = 0; j < M.value_num; j++){
 			if(M.data[j].col == i){
 				T.data[k].row = M.data[j].col;
@@ -19,6 +18,5 @@ Matrix transposeMatrix(Matrix M){
 			}
 		}
 	}
-   
-    return T;
+    	return T;
 }
