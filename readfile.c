@@ -84,19 +84,7 @@ Matrix readfile(char *optarg) {
 
 	//printf("ROW: %d COL: %d VALUE: %f\n", a.data[1].row, a.data[1].col, a.data[1].value);
 
-/*
-	for( int i = 1; i <= col; i++) {
-		for(int j = 1; j <= row; j++) {
-			if(matrixLine[iteration] != '0') {
-				a.data[count].row = j;
-				a.data[count].col = i; 	
-				a.data[count].value = matrixLine[iteration] - '0';
-				count += 1;
-			} 
-			iteration += 1;
-		}
-	}
-*/
+
 	a.value_num = count; //Number of non-zero values
 	a.row_num = row; //Max number of rows
 	a.col_num = col; //Max number of columns
