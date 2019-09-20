@@ -5,7 +5,8 @@
 #include <time.h>
 #include <omp.h>
 #include <getopt.h>
-#define N 255
+#include <stdbool.h>
+#define N 10000 
 
 typedef struct{
 	int row;

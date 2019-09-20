@@ -15,6 +15,7 @@ int trace(Matrix a)
 		}
 	
 	}
+	printf("%f\n", sum);
 
 	return sum;
 }
