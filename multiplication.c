@@ -3,6 +3,7 @@
 Matrix multiplication(Matrix A, Matrix B)
 {
 	Matrix C;
+	C.data = malloc(sizeof(Triple));
 	int a_row, b_row;
 	int p, q, t, ccol, tp;
 	int ctemp[N];
