@@ -1,34 +1,10 @@
 #include "variables.h"
 
-
-Matrix printAddition(Matrix C)
-{
-	int count = 0;
-	int rowCount = 1;
-	int colCount = 1;
-
-	for(int i = 0; i < (C.row_num * C.col_num); i++) {
-		if(colCount > C.col_num) {
-			colCount = 1;
-			rowCount++;
-		}
-		if(C.data[count].row == rowCount && C.data[count].col == colCount) {
-			printf("%f ", C.data[count].value);
-			count++;
-		}
-		else {
-			printf("0 ");
-		}
-		colCount++;
-	}
-	printf("\n");
-	//printf("ROW %d and COL %d\n", C.data[1].row, C.data[1].col);
-
-}
-
 Matrix addition(Matrix A,Matrix B)
 {
 	Matrix C;
+	C.data = malloc(sizeof(Triple));
+
 	int ai,bi,ci;
 	int aj,bj,cj;
 	int ak,bk,ck;
@@ -42,6 +18,8 @@ Matrix addition(Matrix A,Matrix B)
 	while(ak <= A.value_num && bk <= B.value_num){
         	ai = A.data[ak].row;
         	bi = B.data[bk].row;
+		C.data = realloc(C.data, sizeof(Triple) * (ck+1));
+
         	if(ai > bi){
             		ci = bi;
             		while(ci == B.data[bk].row){
@@ -105,7 +83,7 @@ Matrix addition(Matrix A,Matrix B)
     	}
 	C.value_num = ck;
 
-	printAddition(C);
+
 	return C;
 }
 
