@@ -3,6 +3,8 @@
 Matrix addition(Matrix A,Matrix B)
 {
 	Matrix C;
+	C.data = malloc(sizeof(Triple));
+
 	int ai,bi,ci;
 	int aj,bj,cj;
 	int ak,bk,ck;
@@ -16,6 +18,8 @@ Matrix addition(Matrix A,Matrix B)
 	while(ak <= A.value_num && bk <= B.value_num){
         	ai = A.data[ak].row;
         	bi = B.data[bk].row;
+		C.data = realloc(C.data, sizeof(Triple) * (ck+1));
+
         	if(ai > bi){
             		ci = bi;
             		while(ci == B.data[bk].row){
@@ -78,6 +82,7 @@ Matrix addition(Matrix A,Matrix B)
         	++bk;
     	}
 	C.value_num = ck;
+
 
 	return C;
 }
