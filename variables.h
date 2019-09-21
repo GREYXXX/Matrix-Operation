@@ -11,12 +11,12 @@
 typedef struct{
 	int row;
 	int col;
-	float value;
+	double value;
 }Triple;
 
 typedef struct{
-	//Triple *data;
-	Triple data[N];
+	Triple *data;
+	//Triple data[N];
 	int row_num, col_num, value_num;
 }Matrix;
 
