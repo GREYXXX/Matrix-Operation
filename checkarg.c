@@ -39,6 +39,10 @@ int main(int argc, char *argv[])
         char *ts = "ts";
         char *mm = "mm";
 
+	//Time Recording Definitions
+	clock_t read_start, read_end, calc_start, calc_end;
+	double cpu_time_used;
+
   	while (1) {	//Looks at arguments
 		int this_option_optind = optind ? optind : 1;
         	int option_index = 0;
@@ -107,12 +111,16 @@ int main(int argc, char *argv[])
 		printf("?? getopt returned character code 0%o ??\n", c);
 		}
 	}
+	
+	read_start = clock();
 	Matrix m = readfile(seg1);
 	Matrix n;
 	if(argv[optind]){
 		n = readfile(seg2);
 	}
-		 
+	read_end = clock();
+		
+	calc_start = clock(); 
 	if(strcmp(command,sm)==0){
 		m = scalar_mul(op,m);
 		printMatrix(m);
@@ -125,7 +133,7 @@ int main(int argc, char *argv[])
 		printMatrix(m);
 	}
 	else if(strcmp(command,ad)==0){
-		//printf("Addition\n");
+		//printf("Addition is underway\n");
 		m = addition(m, n);
 		printMatrix(m);
 	}
@@ -133,11 +141,17 @@ int main(int argc, char *argv[])
 		printf("Feature not available yet\n");
 		//multiply();
 	}
-			
+	calc_end = clock();
 		
+	cpu_time_used = ((double) (read_end - read_start)) / CLOCKS_PER_SEC;	
+	printf("%f\n", cpu_time_used);
+	cpu_time_used = ((double) (calc_end - calc_start)) / CLOCKS_PER_SEC;	
+	printf("%f\n", cpu_time_used);	
 	free(op);		
 	//free(seg1);
 	free(seg2);
+	
+	
 
 	exit(EXIT_SUCCESS);
 }
