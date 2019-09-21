@@ -2,6 +2,7 @@
 
 Matrix transposeMatrix(Matrix M){
 	Matrix T;
+	T.data = malloc(sizeof(Triple));
 	
 	T.col_num=M.row_num;
 	T.row_num=M.col_num;
@@ -15,6 +16,7 @@ Matrix transposeMatrix(Matrix M){
 				T.data[k].col = M.data[j].row;
 				T.data[k].value = M.data[j].value;
 				k++;
+				T.data = realloc(T.data, sizeof(Triple) * (k+1));
 			}
 		}
 	}
