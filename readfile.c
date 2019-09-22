@@ -148,7 +148,6 @@ Matrix readfile(char *optarg) {
 
 	//printf("ROW: %d COL: %d VALUE: %f\n", a.data[1].row, a.data[1].col, a.data[1].value);
 
-
 	a.value_num = count; //Number of non-zero values
 	a.row_num = row; //Max number of rows
 	a.col_num = col; //Max number of columns
