@@ -1,6 +1,6 @@
 #include "variables.h"
 
-Matrix printMatrix(Matrix C)
+void printMatrix(Matrix C)
 {
 	int count = 0;
 	int rowCount = 1;
