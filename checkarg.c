@@ -1,18 +1,18 @@
 #include "variables.h"
 
-void printMatrix(Matrix C)
+void printMatrix(Matrix P)
 {
 	int count = 0;
 	int rowCount = 1;
 	int colCount = 1;
 
-	for(int i = 0; i < (C.row_num * C.col_num); i++) {
-		if(colCount > C.col_num) {
+	for(int i = 0; i < (P.rowNum * P.colNum); i++) {
+		if(colCount > P.colNum) {
 			colCount = 1;
 			rowCount++;
 		}
-		if(C.data[count].row == rowCount && C.data[count].col == colCount) {
-			printf("%f ", C.data[count].value);
+		if(P.triples[count].row == rowCount && P.triples[count].col == colCount) {
+			printf("%f ", P.triples[count].value);
 			count++;
 		}
 		else {
@@ -21,23 +21,73 @@ void printMatrix(Matrix C)
 		colCount++;
 	}
 	printf("\n");
-	//printf("ROW %d and COL %d\n", C.data[1].row, C.data[1].col);
 
 }
 
 int main(int argc, char *argv[])
 {
    	int c;		//Stores a value from getopt_long which determines whether success or failure
-	char *command = malloc(sizeof(char));//Stores the calculation to be executed for the matrix
-	//char *seg1 = malloc(sizeof(char)); //Stores file name
-	char seg1[N];
-	char *seg2 = malloc(sizeof(char)); //Stores another file name(if needed)
-	char *op = malloc(sizeof(char));
+	int threads = 1;
+	char command[3];//Stores the calculation to be executed for the matrix
+	char inputFile1[32]; //Stores the file name
+	char inputFile2[32]; //Stores another file name(if needed)
+	char op[8];
 	char *sm = "sm";
         char *tr = "tr";
         char *ad = "ad";
         char *ts = "ts";
         char *mm = "mm";
+
+	char outputFile[32] ="21972786_";
+	char buffer[32];
+	char monthbuffer[32];
+	char monthbuffer2[32];
+	time_t t = time(NULL);
+	struct tm tm = *localtime(&t);
+
+	sprintf(buffer, "%d", (tm.tm_mday));
+	strcat(outputFile, buffer);
+
+	int monthNum = tm.tm_mon+1;
+	
+	if(monthNum < 10) {
+		monthbuffer[0] = '0';
+		monthbuffer[1] = '\0';
+		sprintf(monthbuffer2, "%d", (tm.tm_mon+1));
+		strcat(monthbuffer, monthbuffer2);	
+		strcat(outputFile, monthbuffer);
+	}
+	else {
+		sprintf(monthbuffer, "%d", (tm.tm_mon+1));
+		strcat(outputFile, buffer);
+	}
+	
+	memset(buffer, 0, sizeof(buffer));
+	sprintf(buffer, "%d", (tm.tm_year+1900)%2000);
+	strcat(outputFile, buffer);
+	strcat(outputFile, "_");
+
+	memset(buffer, 0, sizeof(buffer));
+	sprintf(buffer, "%d", (tm.tm_hour));
+	strcat(outputFile, buffer);
+
+	int min =  tm.tm_min;
+	if(min < 10) {
+		strcat(outputFile, "0");
+	}
+	memset(buffer, 0, sizeof(buffer));
+	sprintf(buffer, "%d", (tm.tm_min));
+	strcat(outputFile, buffer);
+
+	printf("%s\n", outputFile);
+	exit(EXIT_FAILURE);
+
+	//printf("YEAR: %d\n", (tm.tm_year + 1900) % 2000);
+	//printf("MONTH: %d\n", tm.tm_mon + 1);
+	printf("DAY: %d\n", tm.tm_mday);
+	sprintf(buffer,"%d", (tm.tm_year + 1900)%2000);
+	strcat(outputFile, buffer);	
+	
 
 	//Time Recording Definitions
 	clock_t read_start, read_end, calc_start, calc_end;
@@ -88,17 +138,18 @@ int main(int argc, char *argv[])
 			strcpy(command, "mm");
 			break;
 	       	case 'f':
-			strcpy(seg1, optarg);
+			strcpy(inputFile1, optarg);
 			if(argv[optind]) {
-				strcpy(seg2, argv[optind]);
-				printf("File is %s and %s\n", seg1, seg2);
+				strcpy(inputFile2, argv[optind]);
+				printf("File is %s and %s\n", inputFile1, inputFile2);
 			}
 			else {
-				printf("File is %s\n", seg1);
+				printf("File is %s\n", inputFile1);
 			}
 		    	break;
 		case 't':
 			printf("Number of Threads requested: %s\n",optarg);
+			threads = atoi(optarg);
 			break;
 		case 'l':
 			printf("Log\n");
@@ -113,33 +164,33 @@ int main(int argc, char *argv[])
 	}
 	
 	read_start = clock();
-	Matrix m = readfile(seg1);
-	Matrix n;
-	if(argv[optind]){
-		n = readfile(seg2);
+	Matrix M = readfile(inputFile1);
+	Matrix N;
+	if(argv[optind]) {
+		N = readfile(inputFile2);
 	}
 	read_end = clock();
 		
 	calc_start = clock(); 
 	if(strcmp(command,sm)==0){
-		m = scalar_mul(op,m);
-		printMatrix(m);
+		M = scalar(op,M, threads);
+		//printMatrix(M);
 	}
 	else if(strcmp(command,tr)==0){
-		trace(m);
+		trace(M, threads);
 	}
 	else if(strcmp(command,ts)==0){
-		m = transposeMatrix(m);
-		printMatrix(m);
+		Matrix T = transpose(M);
+		printMatrix(T);
 	}
 	else if(strcmp(command,ad)==0){
 		//printf("Addition is underway\n");
-		m = addition(m, n);
-		printMatrix(m);
+		Matrix R = addition(M, N, threads);
+		printMatrix(R);
 	}
 	else if(strcmp(command,mm)==0){
-		printf("Feature not available yet\n");
-		//multiply();
+		Matrix P = multiplication(M, N);
+		printMatrix(P);
 	}
 	calc_end = clock();
 		
@@ -147,9 +198,6 @@ int main(int argc, char *argv[])
 	printf("%f\n", cpu_time_used);
 	cpu_time_used = ((double) (calc_end - calc_start)) / CLOCKS_PER_SEC;	
 	printf("%f\n", cpu_time_used);	
-	free(op);		
-	//free(seg1);
-	free(seg2);
 	
 	
 

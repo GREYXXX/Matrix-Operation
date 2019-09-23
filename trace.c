@@ -1,23 +1,23 @@
 #include "variables.h"
 
-int trace(Matrix a)
+void trace(Matrix M, int threads)
 {
-	if(a.row_num != a.col_num) {
-		printf("It's not a square matrix\n");
+	if(M.rowNum != M.colNum) {
+		printf("Not a square matrix\n");
 		exit(EXIT_FAILURE);	
 	}
 
 	double sum = 0;
 
-	for(int i = 0;i < a.value_num; i++) {
-		if(a.data[i].row == a.data[i].col){
-			sum = sum + a.data[i].value;
-			//printf("The value is: %f\n", a.data[i].value);
-			//printf("Sum is at: %f\n", sum);
+	omp_set_num_threads(threads);
+	#pragma omp parallel for reduction (+:sum)
+
+	for(int i = 0;i < M.valueNum; i++) {
+		if(M.triples[i].row == M.triples[i].col){
+			sum += M.triples[i].value;
 		}
 	
 	}
 	printf("%f\n", sum);
 
-	return sum;
 }

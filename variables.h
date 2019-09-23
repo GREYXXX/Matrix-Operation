@@ -6,7 +6,6 @@
 #include <omp.h>
 #include <getopt.h>
 #include <stdbool.h>
-#define N 10000 
 
 typedef struct{
 	int row;
@@ -15,14 +14,15 @@ typedef struct{
 }Triple;
 
 typedef struct{
-	Triple *data;
+	Triple *triples;
 	//Triple data[N];
-	int row_num, col_num, value_num;
+	int rowNum, colNum, valueNum; //Max number of rows, columns and non-zero values
 }Matrix;
 
 //Global Functions
 extern Matrix readfile(char *);
-extern Matrix scalar_mul(char *, Matrix);
-extern int trace(Matrix);
-extern Matrix addition(Matrix, Matrix);
-extern Matrix transposeMatrix(Matrix);
+extern Matrix scalar(char *, Matrix, int);
+extern void trace(Matrix, int);
+extern Matrix addition(Matrix, Matrix, int);
+extern Matrix transpose(Matrix);
+extern Matrix multiplication(Matrix, Matrix);

@@ -1,95 +1,41 @@
 #include "variables.h"
 
-Matrix addition(Matrix A,Matrix B)
+Matrix addition(Matrix M, Matrix N, int threads)
 {
-	Matrix C;
-	C.data = malloc(sizeof(Triple));
+	Matrix R; //The resultant matrix
+	int maxNNZ = M.valueNum + N.valueNum; //The maximum possible number of non-zero values
+	R.triples = malloc(sizeof(Triple)* maxNNZ);
+	int count = 1; //Keeps track of number of values in R.triples
 
-	int ai,bi,ci;
-	int aj,bj,cj;
-	int ak,bk,ck;
-	ak = bk = ck = 0;
-	if(A.row_num != B.row_num || A.col_num != B.col_num){
-		printf("MATRIX SIZE IS DIFFERENT\n");
+	if(M.rowNum != N.rowNum) {
+		printf("Both matrices are of different sizes!\n");
 		exit(EXIT_FAILURE);
-    }
-	C.row_num = A.row_num;
-	C.col_num = A.col_num;
-	while(ak <= A.value_num && bk <= B.value_num){
-        	ai = A.data[ak].row;
-        	bi = B.data[bk].row;
-		C.data = realloc(C.data, sizeof(Triple) * (ck+1));
+	}	
 
-        	if(ai > bi){
-            		ci = bi;
-            		while(ci == B.data[bk].row){
-                		C.data[ck].row = ci;
-               			C.data[ck].col = B.data[bk].col;
-                		C.data[ck].value = B.data[bk].value; 
-                		++bk;
-                		++ck;
-            		}            
-        	}else if(ai < bi){
-          		ci = ai;
-           		while(ci == A.data[ak].row){
-                		C.data[ck].row = ci;
-                		C.data[ck].col = A.data[ak].col;
-                		C.data[ck].value = A.data[ak].value;
-                		++ak;
-                		++ck;
-            		}            
-        	}else if(ai == bi){
-            		ci = ai;            
-            		aj = A.data[ak].col;
-            		bj = B.data[bk].col;
-            		if(aj > bj){          
-                		C.data[ck].row = ci;
-                		C.data[ck].col = bj;
-                		C.data[ck].value = B.data[bk].value;
-                		++ck;
-                		++bk;
-            		}else if(aj < bj){ 
-                		C.data[ck].row = ci;
-                		C.data[ck].col = aj;
-                		C.data[ck].value = A.data[ak].value;
-                		++ck;
-               			++ak;
-           	 	}else if(aj == bj){                
-                		if(A.data[ak].value + B.data[bk].value != 0){
-                    			C.data[ck].row = ci;
-                    			C.data[ck].col = aj;
-                    			C.data[ck].value = A.data[ak].value + B.data[bk].value;
-                    			++ck;
-               			 }
-                	++ak;
-                	++bk;
-            }            
-        }
-    }
- 
-	while(ak <= A.value_num){
-        	C.data[ck].row = A.data[ak].row;
-        	C.data[ck].col = A.data[ak].col;
-        	C.data[ck].value = A.data[ak].value;
-        	++ck;
-        	++ak;
-    	}
-	while(bk <= B.value_num){
-        	C.data[ck].row = B.data[bk].row;
-        	C.data[ck].row = B.data[bk].row;
-        	C.data[ck].value = B.data[bk].value;
-        	++ck;
-        	++bk;
-    	}
-	C.value_num = ck;
+	R.triples[0].value = 0;
+	R.rowNum = M.rowNum;
+	R.colNum = M.colNum;
 
+	omp_set_num_threads(threads);
+	#pragma omp for reduction (+:count)
+	for(int i = 0; i < M.valueNum; i++) {
+		R.triples[i].row = M.triples[i].row;
+		R.triples[i].col = M.triples[i].col;
+		R.triples[i].value += M.triples[i].value;
+		//R.triples = realloc(R.triples, sizeof(Triple) * (count+1));
+		count++;
+	}
 
-	return C;
+	for(int i = 0; i < N.valueNum; i++) {
+		R.triples[i].row = N.triples[i].row;
+		R.triples[i].col = N.triples[i].col;
+		R.triples[i].value += N.triples[i].value;
+		//R.triples = realloc(R.triples, sizeof(Triple) * (count+1));
+		count++;
+	}
+
+	R.valueNum = count - 1;
+
+	return R;
+
 }
-
-
-
-
-
-
-
