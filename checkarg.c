@@ -24,6 +24,47 @@ void printMatrix(Matrix P)
 
 }
 
+//Generates and produces the output file based on current data and time
+void produceOutputFile(char *outputFile)
+{
+	char buffer[32];
+	time_t t = time(NULL);
+	struct tm tm = *localtime(&t);
+
+	sprintf(buffer, "%d", (tm.tm_mday));
+	strcat(outputFile, buffer);
+
+	int monthNum = tm.tm_mon+1;
+	
+	if(monthNum < 10) {
+		strcat(outputFile, "0");
+	}
+	memset(buffer, 0, sizeof(buffer));
+	sprintf(buffer, "%d", monthNum);
+	strcat(outputFile, buffer);
+	
+	memset(buffer, 0, sizeof(buffer));
+	sprintf(buffer, "%d", (tm.tm_year+1900)%2000);
+	strcat(outputFile, buffer);
+	strcat(outputFile, "_");
+
+	memset(buffer, 0, sizeof(buffer));
+	int hour = tm.tm_hour;
+	if(hour < 10) {
+		strcat(outputFile, "0");
+	}
+	sprintf(buffer, "%d", (tm.tm_hour));
+	strcat(outputFile, buffer);
+
+	int min =  tm.tm_min;
+	if(min < 10) {
+		strcat(outputFile, "0");
+	}
+	memset(buffer, 0, sizeof(buffer));
+	sprintf(buffer, "%d", (tm.tm_min));
+	strcat(outputFile, buffer);
+}
+
 int main(int argc, char *argv[])
 {
    	int c;		//Stores a value from getopt_long which determines whether success or failure
@@ -39,55 +80,8 @@ int main(int argc, char *argv[])
         char *mm = "mm";
 
 	char outputFile[32] ="21972786_";
-	char buffer[32];
-	char monthbuffer[32];
-	char monthbuffer2[32];
-	time_t t = time(NULL);
-	struct tm tm = *localtime(&t);
-
-	sprintf(buffer, "%d", (tm.tm_mday));
-	strcat(outputFile, buffer);
-
-	int monthNum = tm.tm_mon+1;
-	
-	if(monthNum < 10) {
-		monthbuffer[0] = '0';
-		monthbuffer[1] = '\0';
-		sprintf(monthbuffer2, "%d", (tm.tm_mon+1));
-		strcat(monthbuffer, monthbuffer2);	
-		strcat(outputFile, monthbuffer);
-	}
-	else {
-		sprintf(monthbuffer, "%d", (tm.tm_mon+1));
-		strcat(outputFile, buffer);
-	}
-	
-	memset(buffer, 0, sizeof(buffer));
-	sprintf(buffer, "%d", (tm.tm_year+1900)%2000);
-	strcat(outputFile, buffer);
-	strcat(outputFile, "_");
-
-	memset(buffer, 0, sizeof(buffer));
-	sprintf(buffer, "%d", (tm.tm_hour));
-	strcat(outputFile, buffer);
-
-	int min =  tm.tm_min;
-	if(min < 10) {
-		strcat(outputFile, "0");
-	}
-	memset(buffer, 0, sizeof(buffer));
-	sprintf(buffer, "%d", (tm.tm_min));
-	strcat(outputFile, buffer);
-
+	produceOutputFile(outputFile);
 	printf("%s\n", outputFile);
-	exit(EXIT_FAILURE);
-
-	//printf("YEAR: %d\n", (tm.tm_year + 1900) % 2000);
-	//printf("MONTH: %d\n", tm.tm_mon + 1);
-	printf("DAY: %d\n", tm.tm_mday);
-	sprintf(buffer,"%d", (tm.tm_year + 1900)%2000);
-	strcat(outputFile, buffer);	
-	
 
 	//Time Recording Definitions
 	clock_t read_start, read_end, calc_start, calc_end;
