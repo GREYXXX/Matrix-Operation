@@ -23,6 +23,41 @@ void printMatrix(Matrix P)
 	printf("\n");
 
 }
+	
+int writeMatrix(Matrix P, char *outputFile)
+{
+	FILE *fptr = fopen(outputFile, "w");
+	if(fptr == NULL) {
+		printf("Error!");
+		exit(1);
+	}
+
+	int count = 0;
+	int rowCount = 1;
+	int colCount = 1;
+
+	for(int i = 0; i < (P.rowNum * P.colNum); i++) {
+		if(colCount > P.colNum) {
+			colCount = 1;
+			rowCount++;
+		}
+		if(P.triples[count].row == rowCount && P.triples[count].col == colCount) {
+			fprintf(fptr, "%f ", P.triples[count].value);
+			count++;
+		}
+		else {
+			fprintf(fptr, "0 ");
+		}
+		colCount++;
+	}
+
+	if(outputFile[22] == 's') {
+		return 1;
+	}
+	
+	fclose(fptr);
+	return 1;
+}
 
 //Generates and produces the output file based on current data and time
 void produceOutputFile(char *outputFile)
@@ -63,6 +98,7 @@ void produceOutputFile(char *outputFile)
 	memset(buffer, 0, sizeof(buffer));
 	sprintf(buffer, "%d", (tm.tm_min));
 	strcat(outputFile, buffer);
+	strcat(outputFile, "_");
 }
 
 int main(int argc, char *argv[])
@@ -168,23 +204,37 @@ int main(int argc, char *argv[])
 	calc_start = clock(); 
 	if(strcmp(command,sm)==0){
 		M = scalar(op,M, threads);
+		strcat(outputFile, "sm.out");
 		//printMatrix(M);
+		writeMatrix(M, outputFile);
 	}
 	else if(strcmp(command,tr)==0){
 		trace(M, threads);
+		strcat(outputFile, "tr.out");
 	}
 	else if(strcmp(command,ts)==0){
-		Matrix T = transpose(M);
+		Matrix T = transpose(M, threads );
+		strcat(outputFile, "ts.out");
+		writeMatrix(T, outputFile);
+/*
+		for(int g = 0; g < T.valueNum; g++) {
+			printf("G: %d ROW: %d COL: %d VALUE: %f\n", g, T.triples[g].row, T.triples[g].col, T.triples[g].value);
+		}	
+*/
 		printMatrix(T);
 	}
 	else if(strcmp(command,ad)==0){
 		//printf("Addition is underway\n");
 		Matrix R = addition(M, N, threads);
-		printMatrix(R);
+		strcat(outputFile, "ad.out");
+		writeMatrix(R, outputFile);
+		//printMatrix(R);
 	}
 	else if(strcmp(command,mm)==0){
 		Matrix P = multiplication(M, N);
-		printMatrix(P);
+		strcat(outputFile, "mm.out");
+		writeMatrix(P, outputFile);
+		//printMatrix(P);
 	}
 	calc_end = clock();
 		

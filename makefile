@@ -11,16 +11,16 @@ trace.o: trace.c variables.h
 	gcc -fopenmp -c trace.c
 
 transpose.o: transpose.c variables.h
-	gcc -c transpose.c
+	gcc -fopenmp -c transpose.c
 
 checkarg.o: checkarg.c variables.h
 	gcc -c checkarg.c
 
 addition.o: addition.c variables.h
-	gcc -c addition.c
+	gcc -fopenmp -c addition.c
 
 multiplication.o: multiplication.c variables.h
-	gcc -c multiplication.c variables.h
+	gcc -fopenmp -c multiplication.c variables.h
 
 clean:
 	rm -f *.o main

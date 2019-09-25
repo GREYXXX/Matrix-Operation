@@ -3,7 +3,7 @@
 Matrix multiplication(Matrix M, Matrix N)
 {
 	Matrix P;
-	P.triples = malloc(sizeof(Triple));
+	P.triples = malloc(sizeof(Triple) * M.rowNum * M.rowNum);
 
 	double rowSum = 0;
 	double M_valueFound = 0;
@@ -11,7 +11,7 @@ Matrix multiplication(Matrix M, Matrix N)
 	int x = 0; //Counter for new matrix number of nnz
 
 	for(int rowCount = 1; rowCount <= M.rowNum; rowCount++) {	
-
+		
 		for(int bigcol = 1; bigcol <= M.colNum; bigcol++) {
 		//Every iteration of bigcol, we get a rowSum
 		for(int colCount = 1; colCount <= M.colNum; colCount++) {
@@ -41,7 +41,7 @@ Matrix multiplication(Matrix M, Matrix N)
 		P.triples[x].value = rowSum;
 		rowSum = 0;
 		x++;
-		P.triples = realloc(P.triples, sizeof(Triple) * (x+1));
+		//P.triples = realloc(P.triples, sizeof(Triple) * (x+1));
 	}
 
 	}
@@ -49,6 +49,5 @@ Matrix multiplication(Matrix M, Matrix N)
 	P.colNum = M.colNum;
 	P.valueNum = x;
 	return P;
-
 
 }

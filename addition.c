@@ -16,9 +16,10 @@ Matrix addition(Matrix M, Matrix N, int threads)
 	R.rowNum = M.rowNum;
 	R.colNum = M.colNum;
 
+	int i, j;
 	omp_set_num_threads(threads);
-	#pragma omp for reduction (+:count)
-	for(int i = 0; i < M.valueNum; i++) {
+	#pragma omp parallel for reduction (+:count)
+	for(i = 0; i < M.valueNum; i++) {
 		R.triples[i].row = M.triples[i].row;
 		R.triples[i].col = M.triples[i].col;
 		R.triples[i].value += M.triples[i].value;
@@ -26,10 +27,11 @@ Matrix addition(Matrix M, Matrix N, int threads)
 		count++;
 	}
 
-	for(int i = 0; i < N.valueNum; i++) {
-		R.triples[i].row = N.triples[i].row;
-		R.triples[i].col = N.triples[i].col;
-		R.triples[i].value += N.triples[i].value;
+	#pragma omp parallel for reduction (+:count)
+	for(j = 0; j < N.valueNum; j++) {
+		R.triples[j].row = N.triples[j].row;
+		R.triples[j].col = N.triples[j].col;
+		R.triples[j].value += N.triples[j].value;
 		//R.triples = realloc(R.triples, sizeof(Triple) * (count+1));
 		count++;
 	}

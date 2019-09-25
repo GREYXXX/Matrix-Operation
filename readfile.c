@@ -49,59 +49,44 @@ Matrix readfile(char *optarg) {
 
 	char *matrixLine = chr[3];
 
-	int numlen = 0; //Keeps track of length of number
 	int count = 0; //Keeps track of number of non-zero values 
-	bool numflag = false; //Checks whether there is a number detected
-	bool firstflag = true; //Checks for first non-zero element of the row
 
 	//Current row and column count
 	int rowCount = 1;
 	int colCount = 1;
-	char storeNum[16]; //Stores the value in a character array
 
-	for(int i = 0; i < strlen(matrixLine) + 1; i++) {
+	char *token = strtok(matrixLine, " ");
+	if(atof(token) != 0) {
+		M.triples[count].row = 1;
+		M.triples[count].col = 1;
+		M.triples[count].value = atof(token);
+		count++;
+		colCount++;
+	}
+	else {
+		colCount++;
+	}
+	while(token != NULL) {
+		if(rowCount == row && colCount > col) {
+			break;
+		}
 		if(colCount > col) { 
 			colCount = 1;
 			rowCount++;
-			firstflag = true;
 		}
-		if(matrixLine[i] == '.' && numflag == true) {
-			storeNum[numlen] = matrixLine[i];
-			numlen++;
-			continue;
-		}
-		else if(matrixLine[i] == '.') { //If it is 0.0 , continue
-			continue;
-		}
-		if(matrixLine[i] == '0' && numflag == false ) {
-			continue;
-		}
-		else if(matrixLine[i] == ' ' || matrixLine[i] == '\0') {
-			if(numflag == true) {
-				storeNum[numlen] = '\0';
-				M.triples[count].row = rowCount;
-				M.triples[count].col = colCount;
-				M.triples[count].value = atof(storeNum);
-				//printf("ROW: %d COL: %d VALUE: %f\n", M.triples[count].row, M.triples[count].col, M.triples[count].value);
-				numflag = false;
-				numlen = 0;
-				count++;
-				M.triples = realloc(M.triples, sizeof(Triple) * (count+1));
-				//printf("Memory allocated: %ld and value is: %f\n", sizeof(Triple) * (count+1), M.triples[count-1].value);
-				colCount++;
-				continue;
-			}
+		token = strtok(NULL, " ");
+		if(atof(token) != 0) {
+			M.triples = realloc(M.triples, sizeof(Triple) * (count+1));
+			M.triples[count].row = rowCount;
+			M.triples[count].col = colCount;
+			M.triples[count].value = atof(token);
+			//printf("ROW: %d COL: %d VALUE: %f\n", M.triples[count].row, M.triples[count].col, M.triples[count].value);
+			count++;
 			colCount++;
-			if(colCount > col) {
-				colCount = 1;
-				rowCount++;	
-				firstflag = true;
-			}
+
 		}
 		else {
-			numflag = true;
-			storeNum[numlen] = matrixLine[i];
-			numlen++; 	
+			colCount++;
 		}
 	}
 
@@ -109,13 +94,13 @@ Matrix readfile(char *optarg) {
 	M.rowNum = row; //Max number of rows
 	M.colNum = col; //Max number of columns
 
-/* For Debugging purposes		
-	for( int i = 0; i < a.value_num; i++) {
+/* For Debugging purposes	
+	for( int i = 0; i < M.valueNum; i++) {
 		printf("Value is: %f\n", M.triples[i].value);
 	}	
-	printf("Number of non-zero values: %i\n", a.value_num);
-*/		
-
+	printf("Number of non-zero values: %i\n", M.valueNum);
+	exit(EXIT_SUCCESS);	
+*/
         fclose(fp);
         for(int i = 0; i <4;i++) {
         	free(chr[i]);
