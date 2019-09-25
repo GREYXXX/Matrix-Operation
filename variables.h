@@ -1,3 +1,7 @@
+/*	CITS3402 PROJECT
+	Name:	Syukri Zainal Abidin
+	Student Number: 21972786
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -16,14 +20,13 @@ typedef struct{
 
 typedef struct{
 	Triple *triples;
-	//Triple data[N];
 	int rowNum, colNum, valueNum; //Max number of rows, columns and non-zero values
 }Matrix;
 
 //Global Functions
 extern Matrix readfile(char *);
 extern Matrix scalar(char *, Matrix, int);
-extern void trace(Matrix, int);
+extern double trace(Matrix, int);
 extern Matrix addition(Matrix, Matrix, int);
 extern Matrix transpose(Matrix, int);
-extern Matrix multiplication(Matrix, Matrix);
+extern Matrix multiplication(Matrix, Matrix, int);

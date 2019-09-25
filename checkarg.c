@@ -1,5 +1,14 @@
+/*	CITS3402 PROJECT
+	Name:	Syukri Zainal Abidin
+	Student Number: 21972786
+*/
+
+
 #include "variables.h"
 
+bool logflag = false;
+
+//Prints the matrix to terminal
 void printMatrix(Matrix P)
 {
 	int count = 0;
@@ -24,8 +33,23 @@ void printMatrix(Matrix P)
 
 }
 	
-int writeMatrix(Matrix P, char *outputFile)
+//Writes the matrix to file
+int writeMatrix(Matrix P, char *outputFile, char *command, char *inputFile1, char *inputFile2, double read_time, double calc_time, int threads)
 {
+	if(logflag == false) {
+		printf("%s\n", command);
+		printf("%s\n", inputFile1);
+		if(inputFile2) {
+			printf("%s\n", inputFile2);
+		}
+		printf("%d\n", threads);	
+		printMatrix(P);
+		printf("%f\n", read_time);
+		printf("%f\n", calc_time);
+		return 1;
+	}
+
+
 	FILE *fptr = fopen(outputFile, "w");
 	if(fptr == NULL) {
 		printf("Error!");
@@ -35,6 +59,14 @@ int writeMatrix(Matrix P, char *outputFile)
 	int count = 0;
 	int rowCount = 1;
 	int colCount = 1;
+
+	fprintf(fptr, "%s\n", command);
+	fprintf(fptr, "%s\n", inputFile1);
+	if(inputFile2) {
+		fprintf(fptr, "%s\n", inputFile2);
+	}
+	fprintf(fptr, "%d\n", threads);
+	
 
 	for(int i = 0; i < (P.rowNum * P.colNum); i++) {
 		if(colCount > P.colNum) {
@@ -51,10 +83,11 @@ int writeMatrix(Matrix P, char *outputFile)
 		colCount++;
 	}
 
-	if(outputFile[22] == 's') {
-		return 1;
-	}
-	
+
+
+	fprintf(fptr, "\n%f\n", read_time);
+	fprintf(fptr, "%f\n", calc_time);
+
 	fclose(fptr);
 	return 1;
 }
@@ -115,16 +148,15 @@ int main(int argc, char *argv[])
         char *ts = "ts";
         char *mm = "mm";
 
-	char outputFile[32] ="21972786_";
+	char outputFile[32] ="21972786_"; //outputfile name
 	produceOutputFile(outputFile);
-	printf("%s\n", outputFile);
 
 	//Time Recording Definitions
 	clock_t read_start, read_end, calc_start, calc_end;
-	double cpu_time_used;
+	double read_time, calc_time;
 
   	while (1) {	//Looks at arguments
-		int this_option_optind = optind ? optind : 1;
+		int this_option_optind = optind ? optind : 2;
         	int option_index = 0;
 		static struct option long_options[] = {
 			{"sm",  required_argument, 0,  'a' },	// '--sc' goes to case 'a', 'required_argument' expects an argument after '--sc'
@@ -144,54 +176,45 @@ int main(int argc, char *argv[])
 		case 0:	//Default case
 			break;
 		case 'a':
-		    	printf("Scalar Multiplication %s\n", optarg);
 			strcpy(command, "sm");
 			strcpy(op,optarg);	
 		    	break;
 
 	       	case 'b':
-		    	printf("Trace\n");
 			strcpy(command, "tr");		
 		    	break;
 
 	       	case 'c':
-		    	printf("Addition\n");
 			strcpy(command, "ad");
 		    	break;
 
 	       	case 'd':
-		    	printf("Transpose\n");
 			strcpy(command, "ts");
 		    	break;
 		case 'e':
-			printf("Matrix Multiplication\n");
 			strcpy(command, "mm");
 			break;
 	       	case 'f':
 			strcpy(inputFile1, optarg);
 			if(argv[optind]) {
 				strcpy(inputFile2, argv[optind]);
-				printf("File is %s and %s\n", inputFile1, inputFile2);
-			}
-			else {
-				printf("File is %s\n", inputFile1);
 			}
 		    	break;
 		case 't':
-			printf("Number of Threads requested: %s\n",optarg);
 			threads = atoi(optarg);
 			break;
 		case 'l':
-			printf("Log\n");
+			logflag = true;
 			break;
 
-	       	case '?':	//If the flag is not found, goes here
+	       	case '?':	
 		    	break;
 
 	       	default:
 		printf("?? getopt returned character code 0%o ??\n", c);
 		}
 	}
+	
 	
 	read_start = clock();
 	Matrix M = readfile(inputFile1);
@@ -205,45 +228,63 @@ int main(int argc, char *argv[])
 	if(strcmp(command,sm)==0){
 		M = scalar(op,M, threads);
 		strcat(outputFile, "sm.out");
-		//printMatrix(M);
-		writeMatrix(M, outputFile);
+		calc_end = clock();
+		read_time = ((double) (read_end - read_start)) / CLOCKS_PER_SEC;	
+		calc_time = ((double) (calc_end - calc_start)) / CLOCKS_PER_SEC;	
+		writeMatrix(M, outputFile, command, inputFile1, NULL, read_time, calc_time, threads);
 	}
 	else if(strcmp(command,tr)==0){
-		trace(M, threads);
+		double traceResult = trace(M, threads);
 		strcat(outputFile, "tr.out");
+		calc_end = clock();
+		read_time = ((double) (read_end - read_start)) / CLOCKS_PER_SEC;	
+		calc_time = ((double) (calc_end - calc_start)) / CLOCKS_PER_SEC;
+		if(logflag == false) {
+			printf("%s\n", command);
+			printf("%s\n", inputFile1);
+			printf("%d\n", threads);
+			printf("%f\n", traceResult);
+			printf("%f\n%f\n", read_time, calc_time);
+		}	
+		else {
+			FILE *fptr = fopen(outputFile, "w");
+			if(fptr == NULL) {
+				printf("Error!");
+				exit(1);
+			}
+			fprintf(fptr, "%s\n", command);
+			fprintf(fptr, "%s\n", inputFile1);
+			fprintf(fptr, "%d\n", threads);
+			fprintf(fptr, "%f\n", traceResult);
+			fprintf(fptr, "%f\n%f\n", read_time, calc_time);
+			fclose(fptr);
+		}
+		
 	}
 	else if(strcmp(command,ts)==0){
 		Matrix T = transpose(M, threads );
 		strcat(outputFile, "ts.out");
-		writeMatrix(T, outputFile);
-/*
-		for(int g = 0; g < T.valueNum; g++) {
-			printf("G: %d ROW: %d COL: %d VALUE: %f\n", g, T.triples[g].row, T.triples[g].col, T.triples[g].value);
-		}	
-*/
-		printMatrix(T);
+		calc_end = clock();
+		read_time = ((double) (read_end - read_start)) / CLOCKS_PER_SEC;	
+		calc_time = ((double) (calc_end - calc_start)) / CLOCKS_PER_SEC;	
+		writeMatrix(T, outputFile, command, inputFile1, NULL, read_time, calc_time, threads);
 	}
 	else if(strcmp(command,ad)==0){
-		//printf("Addition is underway\n");
 		Matrix R = addition(M, N, threads);
 		strcat(outputFile, "ad.out");
-		writeMatrix(R, outputFile);
-		//printMatrix(R);
+		calc_end = clock();
+		read_time = ((double) (read_end - read_start)) / CLOCKS_PER_SEC;	
+		calc_time = ((double) (calc_end - calc_start)) / CLOCKS_PER_SEC;	
+		writeMatrix(R, outputFile, command, inputFile1, inputFile2, read_time, calc_time, threads);
 	}
 	else if(strcmp(command,mm)==0){
-		Matrix P = multiplication(M, N);
+		Matrix P = multiplication(M, N, threads);
 		strcat(outputFile, "mm.out");
-		writeMatrix(P, outputFile);
-		//printMatrix(P);
+		calc_end = clock();
+		read_time = ((double) (read_end - read_start)) / CLOCKS_PER_SEC;	
+		calc_time = ((double) (calc_end - calc_start)) / CLOCKS_PER_SEC;	
+		writeMatrix(P, outputFile, command, inputFile1, inputFile2, read_time, calc_time, threads);
 	}
-	calc_end = clock();
-		
-	cpu_time_used = ((double) (read_end - read_start)) / CLOCKS_PER_SEC;	
-	printf("%f\n", cpu_time_used);
-	cpu_time_used = ((double) (calc_end - calc_start)) / CLOCKS_PER_SEC;	
-	printf("%f\n", cpu_time_used);	
-	
-	
 
 	exit(EXIT_SUCCESS);
 }

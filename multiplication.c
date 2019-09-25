@@ -1,6 +1,10 @@
+/*	CITS3402 PROJECT
+	Name:	Syukri Zainal Abidin
+	Student Number: 21972786
+*/
 #include "variables.h"
 
-Matrix multiplication(Matrix M, Matrix N)
+Matrix multiplication(Matrix M, Matrix N, int threads)
 {
 	Matrix P;
 	P.triples = malloc(sizeof(Triple) * M.rowNum * M.rowNum);
@@ -10,6 +14,7 @@ Matrix multiplication(Matrix M, Matrix N)
 	double N_valueFound = 0;
 	int x = 0; //Counter for new matrix number of nnz
 
+	omp_set_num_threads(threads);
 	for(int rowCount = 1; rowCount <= M.rowNum; rowCount++) {	
 		
 		for(int bigcol = 1; bigcol <= M.colNum; bigcol++) {
@@ -35,13 +40,13 @@ Matrix multiplication(Matrix M, Matrix N)
 		if(rowSum == 0) {
 			continue;
 		}
-
+	
 		P.triples[x].row = rowCount;
 		P.triples[x].col = bigcol;	
 		P.triples[x].value = rowSum;
 		rowSum = 0;
 		x++;
-		//P.triples = realloc(P.triples, sizeof(Triple) * (x+1));
+		P.triples = realloc(P.triples, sizeof(Triple) * (x+1));
 	}
 
 	}

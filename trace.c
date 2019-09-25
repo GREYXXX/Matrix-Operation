@@ -1,6 +1,10 @@
+/*	CITS3402 PROJECT
+	Name:	Syukri Zainal Abidin
+	Student Number: 21972786
+*/
 #include "variables.h"
 
-void trace(Matrix M, int threads)
+double trace(Matrix M, int threads)
 {
 	if(M.rowNum != M.colNum) {
 		printf("Not a square matrix\n");
@@ -18,6 +22,6 @@ void trace(Matrix M, int threads)
 		}
 	
 	}
-	printf("%f\n", sum);
+	return sum;
 
 }

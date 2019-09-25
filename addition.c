@@ -1,3 +1,7 @@
+/*	CITS3402 PROJECT
+	Name:	Syukri Zainal Abidin
+	Student Number: 21972786
+*/
 #include "variables.h"
 
 Matrix addition(Matrix M, Matrix N, int threads)

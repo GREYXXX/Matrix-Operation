@@ -1,3 +1,7 @@
+/*	CITS3402 PROJECT
+	Name:	Syukri Zainal Abidin
+	Student Number: 21972786
+*/
 #include "variables.h"	
 
 //This file reads the input and produces an internal representation for the matrix
@@ -41,7 +45,6 @@ Matrix readfile(char *optarg) {
 	dynamicChunk[g] = '\0';
 	chr[h] = strdup(dynamicChunk);
 	g += 256;
-	printf("Allocated a total of %d bytes!\n", g);
 	free(dynamicChunk);
 
 	int row = atoi(chr[1]); //Max number of rows
@@ -80,7 +83,6 @@ Matrix readfile(char *optarg) {
 			M.triples[count].row = rowCount;
 			M.triples[count].col = colCount;
 			M.triples[count].value = atof(token);
-			//printf("ROW: %d COL: %d VALUE: %f\n", M.triples[count].row, M.triples[count].col, M.triples[count].value);
 			count++;
 			colCount++;
 
@@ -94,13 +96,6 @@ Matrix readfile(char *optarg) {
 	M.rowNum = row; //Max number of rows
 	M.colNum = col; //Max number of columns
 
-/* For Debugging purposes	
-	for( int i = 0; i < M.valueNum; i++) {
-		printf("Value is: %f\n", M.triples[i].value);
-	}	
-	printf("Number of non-zero values: %i\n", M.valueNum);
-	exit(EXIT_SUCCESS);	
-*/
         fclose(fp);
         for(int i = 0; i <4;i++) {
         	free(chr[i]);
