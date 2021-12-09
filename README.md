@@ -1,1 +1,1 @@
-# Matrix-Operation-with-OpenMP-Speed-up
+Matrix-Operation-with-OpenMP-Speed-up
