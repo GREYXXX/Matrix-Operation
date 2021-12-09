@@ -1,1 +1,2 @@
-Matrix-Operation-with-OpenMP-Speed-up
+# CITS3402 Assignment
+Speed up mattrix by OpenMP
