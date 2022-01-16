@@ -1,2 +1,2 @@
 # CITS3402 Assignment
-Speed up mattrix by OpenMP
+Matrix-Operations by command line calls
